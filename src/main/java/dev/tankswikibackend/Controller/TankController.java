@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
-@RequestMapping("")
+@RequestMapping("api/")
 public class TankController {
     private TankService tankService;
 

@@ -32,6 +32,7 @@ public class TankService {
     }
 
     public void validateTank(Tank tankToValidate) throws InvalidTankException {
+
         if(tankToValidate.getTankName() == null || tankToValidate.getTankType() == null
                 || tankToValidate.getTankCountry() == null  || tankToValidate.getTankSpeed() == null
                 || tankToValidate.getTankFirepower()==null || tankToValidate.getTankYear() == null)
