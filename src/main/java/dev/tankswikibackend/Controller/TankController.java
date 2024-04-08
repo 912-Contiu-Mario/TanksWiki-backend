@@ -2,15 +2,13 @@ package dev.tankswikibackend.Controller;
 import dev.tankswikibackend.Entity.InvalidTankException;
 import dev.tankswikibackend.Entity.RepositoryException;
 import dev.tankswikibackend.Entity.Tank;
-import dev.tankswikibackend.Repository.TankRepository;
 import dev.tankswikibackend.Service.TankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @CrossOrigin
@@ -21,6 +19,12 @@ public class TankController {
     @Autowired
     public TankController(TankService tankService){
         this.tankService = tankService;
+    }
+
+
+    @GetMapping("/health")
+    void serverHealth(){
+
     }
 
     @PostMapping("/tanks")
@@ -51,7 +55,7 @@ public class TankController {
     @GetMapping("/tanks")
     ResponseEntity<?> allTanks(){
         try{
-            return ResponseEntity.ok().body(tankService.getAllTanks());
+            return ResponseEntity.ok().body(tankService.getAllTanksSorted(""));
         }
         catch (Exception exception){
             return ResponseEntity.internalServerError().body(exception.getMessage());
@@ -70,7 +74,7 @@ public class TankController {
         catch(InvalidTankException exception){
             return ResponseEntity.badRequest().body(exception.getMessage());
         }
-}
+    }
     @DeleteMapping("tanks/{id}")
     ResponseEntity<String> deleteTank(@PathVariable Long id){
         try{
