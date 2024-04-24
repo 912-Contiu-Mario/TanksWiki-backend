@@ -19,6 +19,13 @@ import java.util.Optional;
 @Service
 public class TankService {
 
+
+    private ModuleService moduleService;
+
+
+
+
+
     private static final String[] MILITARY_TERMS = {
             "Steel", "Iron", "Armored", "Thunder", "Warrior", "Shield", "Battle", "Victory", "Elite", "Spartan",
             "Delta", "Bravo", "Ranger", "Commando", "Valor", "Guardian", "Assault", "Recon", "Dominion", "Sentinel"
@@ -35,8 +42,10 @@ public class TankService {
     TankRepository tankRepository;
 
     @Autowired
-    public TankService(TankRepository tankRepository){
+    public TankService(TankRepository tankRepository, ModuleService moduleService){
         this.tankRepository = tankRepository;
+        this.moduleService = moduleService;
+
         this.generateFakeTanks(50);
     }
 
@@ -89,8 +98,11 @@ public class TankService {
         }
     }
 
+
+
     public void deleteTank(Long id)throws RepositoryException{
         try{
+            moduleService.deleteTankModules(id);
             tankRepository.deleteById(id);
         }
         catch(Exception exception){
@@ -125,8 +137,8 @@ public class TankService {
     }
 
 
-//    @Scheduled(fixedDelay = 5000) // Generate new tank every 5 seconds
-//    @Async
+//    @Scheduled(fixedDelay = 5000)
+    @Async
     public void generateNewTank(){
         generateFakeTanks(1);
     }

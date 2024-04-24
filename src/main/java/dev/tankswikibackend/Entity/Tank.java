@@ -1,15 +1,14 @@
 package dev.tankswikibackend.Entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor @ToString
+@Table(name = "Tanks")
 public class Tank {
-    private @Id @GeneratedValue Long id;
+    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
     private String tankName;
     private String tankCountry;
     private String tankType;

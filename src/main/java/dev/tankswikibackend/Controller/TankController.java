@@ -6,13 +6,12 @@ import dev.tankswikibackend.Service.TankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @CrossOrigin
-@RequestMapping("api/")
+@RequestMapping("api/tanks")
 public class TankController {
     private TankService tankService;
 
@@ -27,7 +26,7 @@ public class TankController {
 
     }
 
-    @PostMapping("/tanks")
+    @PostMapping("")
     ResponseEntity<String> newTank(@RequestBody Tank newTank){
         try{
             tankService.addTank(newTank);
@@ -42,7 +41,7 @@ public class TankController {
     }
 
 
-    @GetMapping("/tanks/{id}")
+    @GetMapping("/{id}")
     ResponseEntity<?> getTankById(@PathVariable Long id){
         try{
             return ResponseEntity.ok().body(tankService.getTankById(id));
@@ -52,7 +51,7 @@ public class TankController {
         }
     }
 
-    @GetMapping("/tanks")
+    @GetMapping("")
     ResponseEntity<?> allTanks(){
         try{
             return ResponseEntity.ok().body(tankService.getAllTanksSorted(""));
@@ -62,7 +61,7 @@ public class TankController {
         }
     }
 
-    @PutMapping("/tanks/{id}")
+    @PutMapping("/{id}")
     ResponseEntity<String> updateTank(@PathVariable Long id, @RequestBody Tank updatedTank){
         try{
             tankService.updateTank(id, updatedTank);
@@ -75,7 +74,7 @@ public class TankController {
             return ResponseEntity.badRequest().body(exception.getMessage());
         }
     }
-    @DeleteMapping("tanks/{id}")
+    @DeleteMapping("{id}")
     ResponseEntity<String> deleteTank(@PathVariable Long id){
         try{
             tankService.deleteTank(id);
