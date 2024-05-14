@@ -3,7 +3,6 @@ package dev.tankswikibackend;
 
 import dev.tankswikibackend.Entity.Module;
 import dev.tankswikibackend.Entity.RepositoryException;
-import dev.tankswikibackend.Entity.Tank;
 import dev.tankswikibackend.Repository.ModuleRepository;
 import dev.tankswikibackend.Service.ModuleService;
 import org.junit.jupiter.api.Test;
@@ -11,20 +10,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.hasSize;
+import static junit.framework.TestCase.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(MockitoExtension.class)
 public class ModuleServiceTest {
@@ -37,11 +31,10 @@ public class ModuleServiceTest {
 
     @Test
     public void testAddModule() throws RepositoryException {
-        Module newModule = new Module(60L,"Gun variation 1", "gun", 55, 30, 20, 155 );
+        Module newModule = new Module(1L, 60L,"Gun variation 1", "gun", 55, 30, 20, 155 );
 
         when(moduleRepository.save(any(Module.class))).thenReturn(newModule);
-        moduleService.addModule(newModule);
-
+        assert(moduleService.addModule(newModule) == 1L);
     }
 
     @Test
@@ -88,6 +81,58 @@ public class ModuleServiceTest {
         when(moduleRepository.findByTankIdAndModuleType(tankId, type)).thenReturn(list);
         moduleService.getTankModulesByType(tankId, type);
 
+    }
+    @Test
+    public void testGenerateFakeModules() {
+        // Assume moduleService is instantiated
+
+        // Module types to test
+        String[] moduleTypes = {"engine", "suspension", "gun", "radio"};
+
+        for (String type : moduleTypes) {
+            Module module = moduleService.generateFakeModule(1L, type);
+
+            // Check weight for all - always relevant
+            assertTrue(module.getModuleWeight() >= 0 && module.getModuleWeight() <= 100000, "Weight should be within 0-100000 for " + type);
+
+            // Check properties based on module type
+            switch (type) {
+                case "engine":
+                    assertTrue(module.getModuleHorsepower() >= 0 && module.getModuleHorsepower() <= 10000, "Horsepower should be within 0-10000 for engine");
+                    assertNull(module.getModuleLoadLimit() , "Load limit should be within 0-1000 for engine");
+                    assertNull(module.getModuleDamage());
+                    assertNull( module.getModuleRateOfFire(), "Rate of fire should be zero for engine");
+                    assertNull(module.getModulePenetration(), "Penetration should be zero for engine");
+                    assertNull(module.getModuleSignalRange(), "Signal range should be zero for engine");
+                    break;
+                case "suspension":
+                    assertTrue(module.getModuleLoadLimit() >= 0 && module.getModuleLoadLimit() <= 1000, "Load limit should be within 0-1000 for suspension");
+                    assertNull(module.getModuleHorsepower(), "Horsepower should be zero for suspension");
+                    assertNull(module.getModuleDamage(), "Damage should be zero for suspension");
+                    assertNull(module.getModuleRateOfFire(), "Rate of fire should be zero for suspension");
+                    assertNull(module.getModulePenetration(), "Penetration should be zero for suspension");
+                    assertNull(module.getModuleSignalRange(), "Signal range should be zero for suspension");
+                    break;
+                case "gun":
+                    assertTrue(module.getModuleDamage() >= 0 && module.getModuleDamage() <= 5000, "Damage should be within 0-5000 for gun");
+                    assertTrue(module.getModuleRateOfFire() >= 0 && module.getModuleRateOfFire() <= 100, "Rate of fire should be within 0-100 for gun");
+                    assertTrue(module.getModulePenetration() >= 0 && module.getModulePenetration() <= 1000, "Penetration should be within 0-1000 for gun");
+                    assertNull( module.getModuleHorsepower(), "Horsepower should be zero for gun");
+                    assertNull( module.getModuleLoadLimit(), "Load limit should be zero for gun");
+                    assertNull( module.getModuleSignalRange(), "Signal range should be zero for gun");
+                    break;
+                case "radio":
+                    assertTrue(module.getModuleSignalRange() >= 0 && module.getModuleSignalRange() <= 5000, "Signal range should be within 0-5000 for radio");
+                    assertNull( module.getModuleHorsepower(), "Horsepower should be zero for radio");
+                    assertNull( module.getModuleLoadLimit(), "Load limit should be zero for radio");
+                    assertNull( module.getModuleDamage(), "Damage should be zero for radio");
+                    assertNull( module.getModuleRateOfFire(), "Rate of fire should be zero for radio");
+                    assertNull( module.getModulePenetration(), "Penetration should be zero for radio");
+                    break;
+                default:
+                    fail("Unexpected module type: " + type);
+            }
+        }
     }
 
 

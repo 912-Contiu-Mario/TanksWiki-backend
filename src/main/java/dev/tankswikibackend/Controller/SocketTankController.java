@@ -25,7 +25,6 @@ public class SocketTankController {
     SocketTankController(TankService tankService){
         this.tankService = tankService;
     }
-
     @MessageMapping("/getTanks")
     @Scheduled(fixedDelay = 5000)
     public void sendTankUpdate(){

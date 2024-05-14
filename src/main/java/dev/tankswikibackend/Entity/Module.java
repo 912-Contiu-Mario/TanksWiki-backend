@@ -77,4 +77,8 @@ public class Module
     @Nullable
 
     private Integer moduleSignalRange;
+
+    public Module(long l, long l1, String s, String gun, int i, int i1, int i2, int i3) {
+        this.id = l;
+    }
 }

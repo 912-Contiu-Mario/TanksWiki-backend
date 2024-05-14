@@ -5,9 +5,13 @@ import dev.tankswikibackend.Entity.Module;
 import dev.tankswikibackend.Entity.RepositoryException;
 import dev.tankswikibackend.Service.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 
@@ -15,24 +19,31 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/modules")
 public class ModuleController {
     private ModuleService moduleService;
-
-
     @Autowired
     public ModuleController(ModuleService moduleService){
         this.moduleService= moduleService;
     }
 
-
     @PostMapping("")
-    ResponseEntity<String> newModule(@RequestBody Module newModule){
+    ResponseEntity<?> newModule(@RequestBody Module newModule){
         try{
-            moduleService.addModule(newModule);
-            return ResponseEntity.ok().body("Module added");
+            return ResponseEntity.ok().body(moduleService.addModule(newModule));
         }
         catch(RepositoryException exception){
             return ResponseEntity.internalServerError().body(exception.getMessage());
         }
     }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<String> newModules(@RequestBody List<Module> newModules) {
+        try {
+            moduleService.addModules(newModules);
+            return ResponseEntity.ok().body("Modules added");
+        } catch (RepositoryException exception) {
+            return ResponseEntity.internalServerError().body(exception.getMessage());
+        }
+    }
+
 
     @PutMapping("/{moduleId}")
     ResponseEntity<String> updateModule(@PathVariable Long moduleId, @RequestBody Module updatedModule){
@@ -69,10 +80,19 @@ public class ModuleController {
     }
 
     @GetMapping(value = "/{tankId}", params = "moduleType")
-    ResponseEntity<?> getTankModules(@PathVariable Long tankId, @RequestParam(value = "moduleType")String moduleType ){
+    ResponseEntity<?> getTankModulesByModuleType(@PathVariable Long tankId, @RequestParam(value = "moduleType")String moduleType ){
 
         try{
             return ResponseEntity.ok().body(moduleService.getTankModulesByType(tankId, moduleType));
+        }
+        catch(RepositoryException exception){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+        }
+    }
+    @GetMapping(value = "modulesPage/{tankId}", params = "moduleType")
+    ResponseEntity<?> getTankModulesByModuleTypePaginated(@PathVariable Long tankId, @RequestParam(value = "moduleType")String moduleType, @PageableDefault(size = 50) Pageable pageable){
+        try{
+            return ResponseEntity.ok().body(moduleService.getModulesPage(tankId, moduleType, pageable).getContent());
         }
         catch(RepositoryException exception){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());

@@ -16,3 +16,4 @@ public class Tank {
     private Integer tankFirepower;
     private Integer tankSpeed;
 }
+

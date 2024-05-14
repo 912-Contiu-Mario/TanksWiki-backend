@@ -47,13 +47,13 @@ public class ModuleControllerTest {
         Module newModule = new Module(60L,"Gun variation 1", "gun", 55, 30, 20, 155 );
         ObjectMapper objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(newModule);
+        when(mockModuleService.addModule(newModule)).thenReturn(60L);
 
         this.mockMvc.perform(MockMvcRequestBuilders.post("/api/modules")
                         .contentType(MediaType.APPLICATION_JSON) // Set content type to JSON
                         .content(requestBody)) // Set request body
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(content().contentType(MediaType.TEXT_PLAIN_VALUE+";charset=UTF-8"))
-                .andExpect(content().string("Module added"));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test

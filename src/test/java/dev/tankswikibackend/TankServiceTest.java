@@ -10,9 +10,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -68,6 +70,15 @@ public class TankServiceTest {
 
         tankService.deleteTank(tankId);
         verify(tankRepository).deleteById(tankId);
+    }
+
+    @Test
+    public void testGetTanksPage_Found() throws RepositoryException{
+        Tank newTank = new Tank(1L, "IS-7", "Soviet Union", "Heavy Tank", 1942, 2000, 32);
+        List<Tank> tanksList = List.of(newTank, newTank,newTank,newTank,newTank,newTank,newTank,newTank,newTank,newTank);
+
+        when(tankRepository.findAll(PageRequest.of(0, 10))).thenReturn(new PageImpl<>(tanksList));
+
     }
 
     @Test void deleteTank_Not_Found(){
