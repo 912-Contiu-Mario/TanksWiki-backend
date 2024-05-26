@@ -38,7 +38,7 @@ public class AuthController {
             Authentication authentication =
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getEmail(), loginReq.getPassword()));
             String email = authentication.getName();
-            User user = new User(email,"", "");
+            User user = this.userService.findUserByEmail(email);
 
             String token = jwtUtil.createToken(user);
                 LoginRes loginRes = new LoginRes(this.userService.findIdByEmail(email), email,this.userService.findUsernameByEmail(email),  token);

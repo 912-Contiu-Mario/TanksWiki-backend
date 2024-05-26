@@ -27,11 +27,12 @@ public class JwtUtil {
     }
 
     public String createToken(User user) {
-        Claims claims = Jwts.claims().setSubject(user.getEmail());
+
         Date tokenCreateTime = new Date();
         Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
         return Jwts.builder()
-                .setClaims(claims)
+                .setSubject(user.getEmail())
+                .claim("role", user.getRole())
                 .setExpiration(tokenValidity)
                 .signWith(SignatureAlgorithm.HS256, secret_key)
                 .compact();
@@ -78,8 +79,8 @@ public class JwtUtil {
         return claims.getSubject();
     }
 
-    private List<String> getRoles(Claims claims) {
-        return (List<String>) claims.get("roles");
+    public String getRoles(Claims claims) {
+        return (String) claims.get("role");
     }
 
 

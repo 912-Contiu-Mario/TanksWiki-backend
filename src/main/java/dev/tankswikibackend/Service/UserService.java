@@ -15,7 +15,8 @@ public class UserService {
 
 
     @Autowired
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository)
+    {
         this.userRepository = userRepository;
     }
    public User createUser(String email, String username, String unencryptedPassword, PasswordEncoder encoder) throws RepositoryException {
@@ -46,6 +47,15 @@ public class UserService {
 
     public Long findIdByEmail(String email){
         return this.userRepository.findByEmail(email).getId();
+    }
+
+
+    public String getUserRole(User user){
+        return this.userRepository.findByEmail(user.getEmail()).getRole();
+    }
+
+    public User findUserByEmail(String email){
+        return this.userRepository.findByEmail(email);
     }
 
 

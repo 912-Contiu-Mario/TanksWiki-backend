@@ -3,6 +3,7 @@ import dev.tankswikibackend.Entity.InvalidTankException;
 import dev.tankswikibackend.Entity.RepositoryException;
 import dev.tankswikibackend.Entity.Tank;
 import dev.tankswikibackend.Service.TankService;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,12 +27,10 @@ public class TankController {
     }
 
 
-    @GetMapping("/health")
-    void serverHealth(){
 
-    }
 
     @PostMapping("")
+    @RolesAllowed("ROLE_ADMIN")
     ResponseEntity<?> newTank(@RequestBody Tank newTank){
         try{
 
@@ -46,6 +45,7 @@ public class TankController {
     }
 
 
+
     @GetMapping("/tanksPage")
     ResponseEntity<?> getTanks(@PageableDefault(size = 50)Pageable pageable){
         try{
@@ -56,6 +56,9 @@ public class TankController {
             return ResponseEntity.internalServerError().body(exception.getMessage());
         }
     }
+
+
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_MANAGER"})
     @PostMapping("/bulk")
     public ResponseEntity<String> newTanks(@RequestBody List<Tank> newTanks) {
         try {
@@ -111,6 +114,7 @@ public class TankController {
     }
 
 
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_MANAGER"})
     @PutMapping("/{id}")
     ResponseEntity<String> updateTank(@PathVariable Long id, @RequestBody Tank updatedTank){
         try{
@@ -124,6 +128,9 @@ public class TankController {
             return ResponseEntity.badRequest().body(exception.getMessage());
         }
     }
+
+
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_MANAGER"})
     @DeleteMapping("{id}")
     ResponseEntity<String> deleteTank(@PathVariable Long id){
         try{

@@ -4,6 +4,7 @@ package dev.tankswikibackend.Controller;
 import dev.tankswikibackend.Entity.Module;
 import dev.tankswikibackend.Entity.RepositoryException;
 import dev.tankswikibackend.Service.ModuleService;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -24,6 +25,9 @@ public class ModuleController {
         this.moduleService= moduleService;
     }
 
+
+
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_MANAGER"})
     @PostMapping("")
     ResponseEntity<?> newModule(@RequestBody Module newModule){
         try{
@@ -34,6 +38,8 @@ public class ModuleController {
         }
     }
 
+
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_MANAGER"})
     @PostMapping("/bulk")
     public ResponseEntity<String> newModules(@RequestBody List<Module> newModules) {
         try {
@@ -45,6 +51,8 @@ public class ModuleController {
     }
 
 
+
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_MANAGER"})
     @PutMapping("/{moduleId}")
     ResponseEntity<String> updateModule(@PathVariable Long moduleId, @RequestBody Module updatedModule){
         try{
@@ -57,6 +65,9 @@ public class ModuleController {
         }
     }
 
+
+
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_MANAGER"})
     @DeleteMapping("/{moduleId}")
     ResponseEntity<String> deleteModule(@PathVariable Long moduleId){
         try{
