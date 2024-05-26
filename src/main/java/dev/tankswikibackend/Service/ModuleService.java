@@ -84,7 +84,6 @@ public class ModuleService {
         for (List<Module> batch : batches) {
             moduleRepository.saveAll(batch);
         }
-
         return generatedModules;
     }
 

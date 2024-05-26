@@ -38,9 +38,10 @@ public class AuthController {
             Authentication authentication =
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getEmail(), loginReq.getPassword()));
             String email = authentication.getName();
-            User user = new User(email,"");
+            User user = new User(email,"", "");
+
             String token = jwtUtil.createToken(user);
-            LoginRes loginRes = new LoginRes(email,token);
+                LoginRes loginRes = new LoginRes(this.userService.findIdByEmail(email), email,this.userService.findUsernameByEmail(email),  token);
             return ResponseEntity.ok(loginRes);
 
         }catch (BadCredentialsException e){
@@ -56,13 +57,13 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody RegisterReq registerReq) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
             try {
-                User newUser = userService.createUser(registerReq.getEmail(), registerReq.getPassword(), encoder);
+                User newUser = userService.createUser(registerReq.getEmail(),registerReq.getUsername(),  registerReq.getPassword(), encoder);
                 Authentication authentication =
                         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(registerReq.getEmail(), registerReq.getPassword()));
                 String email = authentication.getName();
-                User user = new User(email,"");
+                User user = new User(email,"", "");
                 String token = jwtUtil.createToken(user);
-                LoginRes loginRes = new LoginRes(email,token);
+                LoginRes loginRes = new LoginRes(newUser.getId(), email, registerReq.getUsername(), token);
                 return ResponseEntity.ok(loginRes);
             } catch (Exception exception) {
                 return ResponseEntity.badRequest().body(exception.getMessage());

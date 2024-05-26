@@ -5,26 +5,24 @@ import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
-
 import javax.crypto.SecretKey;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtUtil {
-
-
-    private final SecretKey secret_key;
-    private long accessTokenValidity = 60*60*1000;
-
+    private final String secret_key = "rT95I1lUJE7m1R28CJb/bduqLDS0KNfdyLZ4pHkE8d8=";
+    private long accessTokenValidity = 60; // 1 minute and 30 seconds
     private final JwtParser jwtParser;
-
     private final String TOKEN_HEADER = "Authorization";
     private final String TOKEN_PREFIX = "Bearer ";
 
     public JwtUtil(){
-        this.secret_key = io.jsonwebtoken.security.Keys.secretKeyFor(SignatureAlgorithm.HS256);
+//        this.secret_key = io.jsonwebtoken.security.Keys.secretKeyFor(SignatureAlgorithm.HS256);
+//        String base64EncodedKey = Base64.getEncoder().encodeToString(secret_key.getEncoded());
+//        System.out.println(base64EncodedKey);
         this.jwtParser = Jwts.parser().setSigningKey(secret_key);
     }
 

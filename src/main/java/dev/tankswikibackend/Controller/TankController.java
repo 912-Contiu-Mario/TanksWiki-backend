@@ -100,6 +100,17 @@ public class TankController {
         }
     }
 
+    @GetMapping("/userTanks")
+    ResponseEntity<?> allUserTanks(@RequestParam Long userId){
+        try{
+            return ResponseEntity.ok(tankService.getAllTanksByUserId(userId));
+        }
+        catch (RepositoryException exception){
+            return ResponseEntity.internalServerError().body(exception.getMessage());
+        }
+    }
+
+
     @PutMapping("/{id}")
     ResponseEntity<String> updateTank(@PathVariable Long id, @RequestBody Tank updatedTank){
         try{

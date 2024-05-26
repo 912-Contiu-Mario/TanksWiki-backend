@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 @Setter
 @Getter
 public class LoginRes {
+    private Long id;
     private String email;
+    private String username;
     private String token;
 }
 

@@ -11,5 +11,8 @@ import lombok.Setter;
 @Setter
 public class RegisterReq {
     private String email;
+    private String username;
+    
     private String password;
 }
+

@@ -24,7 +24,6 @@ import java.util.stream.IntStream;
 
 @Service
 public class TankService {
-    private ModuleService moduleService;
     private static final String[] MILITARY_TERMS = {
             "Steel", "Iron", "Armored", "Thunder", "Warrior", "Shield", "Battle", "Victory", "Elite", "Spartan",
             "Delta", "Bravo", "Ranger", "Commando", "Valor", "Guardian", "Assault", "Recon", "Dominion", "Sentinel"
@@ -36,14 +35,16 @@ public class TankService {
     private static final String[] TANK_SUFFIXES = {"Mark", "II", "III", "IV", "V", "X", "Alpha", "Beta", "Delta", "Gamma"};
     private static final String[] TANK_TYPES = {"Heavy Tank", "Light Tank", "Medium Tank", "Main Battle Tank"};
     private static final String[] TANK_COUNTRIES = {"Russia", "Germany", "UK", "France", "Japan", "USA"};
-    TankRepository tankRepository;
+    private TankRepository tankRepository;
+    private ModuleService moduleService;
+
 
     @Autowired
     public TankService(TankRepository tankRepository, ModuleService moduleService){
         this.tankRepository = tankRepository;
         this.moduleService = moduleService;
-        this.generateFakeTanks(500);
-        moduleService.generateFakeModules(tankRepository.findAll(), 100  );
+        this.generateFakeTanks(100);
+        moduleService.generateFakeModules(tankRepository.findAll(), 100);
     }
 
 
@@ -88,11 +89,20 @@ public class TankService {
     public Page<Tank> getTanksPage(Pageable pageable) throws RepositoryException {
         try {
             return tankRepository.findAll(pageable);
-
         }
         catch (Exception exception){
             throw new RepositoryException("Couldn't fetch tank page");
 
+        }
+    }
+
+
+    public List<Tank> getAllTanksByUserId(Long userId) throws RepositoryException {
+        try{
+            return tankRepository.findByUserId(userId);
+        }
+        catch (Exception exception){
+            throw new RepositoryException("Couldn't fetch user tanks");
         }
     }
 
@@ -128,7 +138,13 @@ public class TankService {
             if(tankToUpdate.isEmpty()){
                 throw new RepositoryException("Tank you want to update does not exist");
             }
-            tankRepository.save(updatedTank);
+            else {
+                if(updatedTank.getUserId() != tankToUpdate.get().getUserId())
+                {
+                    throw new RepositoryException("Permission denied");
+                }
+                tankRepository.save(updatedTank);
+            }
         }
         catch (Exception exception){
             throw new RepositoryException("Couldn't update tank");
@@ -165,6 +181,9 @@ public class TankService {
 
 
 
+
+
+
     private String generateTankName() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         String militaryTerm = MILITARY_TERMS[random.nextInt(MILITARY_TERMS.length)];
@@ -172,6 +191,10 @@ public class TankService {
         String suffix = TANK_SUFFIXES[random.nextInt(TANK_SUFFIXES.length)];
         return militaryTerm + " " + technologyTerm + " " + suffix;
     }
+
+
+
+
 
     @Transactional
     public List<Tank> generateFakeTanks(int numberOfTanks) {
@@ -185,6 +208,7 @@ public class TankService {
                     tank.setTankYear(ThreadLocalRandom.current().nextInt(1917, 2025)); // Adjust year range as needed
                     tank.setTankFirepower(ThreadLocalRandom.current().nextInt(20, 5000)); // Adjust firepower range as needed
                     tank.setTankSpeed(ThreadLocalRandom.current().nextInt(10, 100)); // Adjust speed range as needed
+
                     return tank;
                 })
                 .collect(Collectors.toList());

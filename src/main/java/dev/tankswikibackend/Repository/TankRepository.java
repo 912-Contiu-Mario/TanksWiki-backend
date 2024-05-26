@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface TankRepository extends JpaRepository<Tank, Long> {
     List<Tank> findByTankName(String tankName);
+    List<Tank> findByUserId(Long userId);
 }

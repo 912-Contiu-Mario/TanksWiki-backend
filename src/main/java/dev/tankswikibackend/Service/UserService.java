@@ -18,11 +18,11 @@ public class UserService {
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
     }
-   public User createUser(String email, String unencryptedPassword, PasswordEncoder encoder) throws RepositoryException {
+   public User createUser(String email, String username, String unencryptedPassword, PasswordEncoder encoder) throws RepositoryException {
         try{
             this.validateEmail(email);
             this.validatePassword(unencryptedPassword);
-            User userToCreate = new User(email, encoder.encode(unencryptedPassword));
+            User userToCreate = new User(email, username,  encoder.encode(unencryptedPassword));
             return userRepository.save(userToCreate);
 
         }
@@ -38,6 +38,14 @@ public class UserService {
     }
     void validatePassword(String password){
 
+    }
+
+    public String findUsernameByEmail(String email){
+        return this.userRepository.findByEmail(email).getUsername();
+    }
+
+    public Long findIdByEmail(String email){
+        return this.userRepository.findByEmail(email).getId();
     }
 
 
