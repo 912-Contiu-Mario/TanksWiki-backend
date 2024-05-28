@@ -43,8 +43,8 @@ public class TankService {
     public TankService(TankRepository tankRepository, ModuleService moduleService){
         this.tankRepository = tankRepository;
         this.moduleService = moduleService;
-        this.generateFakeTanks(100);
-        moduleService.generateFakeModules(tankRepository.findAll(), 100);
+//        this.generateFakeTanks(100);
+//        moduleService.generateFakeModules(tankRepository.findAll(), 100);
     }
 
 

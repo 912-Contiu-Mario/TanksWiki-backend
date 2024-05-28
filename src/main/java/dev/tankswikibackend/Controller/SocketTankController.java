@@ -26,7 +26,7 @@ public class SocketTankController {
         this.tankService = tankService;
     }
     @MessageMapping("/getTanks")
-    @Scheduled(fixedDelay = 5000)
+//    @Scheduled(fixedDelay = 5000)
     public void sendTankUpdate(){
         try {
             messagingTemplate.convertAndSend("/topic/tanks", tankService.getAllTanksSorted(""));
