@@ -20,9 +20,6 @@ public class JwtUtil {
     private final String TOKEN_PREFIX = "Bearer ";
 
     public JwtUtil(){
-//        this.secret_key = io.jsonwebtoken.security.Keys.secretKeyFor(SignatureAlgorithm.HS256);
-//        String base64EncodedKey = Base64.getEncoder().encodeToString(secret_key.getEncoded());
-//        System.out.println(base64EncodedKey);
         this.jwtParser = Jwts.parser().setSigningKey(secret_key);
     }
 

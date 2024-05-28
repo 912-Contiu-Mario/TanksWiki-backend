@@ -131,7 +131,7 @@ public class TankController {
 
 
     @RolesAllowed({"ROLE_ADMIN", "ROLE_MANAGER"})
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<String> deleteTank(@PathVariable Long id){
         try{
             tankService.deleteTank(id);

@@ -55,9 +55,10 @@ public class AuthController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<?> register(@RequestBody RegisterReq registerReq) {
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
             try {
-                User newUser = userService.createUser(registerReq.getEmail(),registerReq.getUsername(),  registerReq.getPassword(), encoder);
+
+                User newUser = new User(registerReq.getEmail(),registerReq.getUsername(), "USER", registerReq.getPassword());
+                userService.addUser(newUser);
                 Authentication authentication =
                         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(registerReq.getEmail(), registerReq.getPassword()));
                 String email = authentication.getName();

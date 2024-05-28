@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);
             List<String> roles = new ArrayList<>();
-            roles.add("USER");
+            roles.add(user.getRole());
             UserDetails userDetails =
                     org.springframework.security.core.userdetails.User.builder()
                             .username(user.getEmail())

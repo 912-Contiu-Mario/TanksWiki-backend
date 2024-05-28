@@ -139,10 +139,10 @@ public class TankService {
                 throw new RepositoryException("Tank you want to update does not exist");
             }
             else {
-                if(updatedTank.getUserId() != tankToUpdate.get().getUserId())
-                {
-                    throw new RepositoryException("Permission denied");
-                }
+//                if(updatedTank.getUserId() != tankToUpdate.get().getUserId())
+//                {
+//                    throw new RepositoryException("Permission denied");
+//                }
                 tankRepository.save(updatedTank);
             }
         }

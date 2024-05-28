@@ -43,7 +43,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 return;
             }
             Claims claims = jwtUtil.resolveClaims(request);
-            System.out.println(jwtUtil.getRoles(claims));
 
             if(claims != null & jwtUtil.validateClaims(claims)){
                 String email = claims.getSubject();
