@@ -1,8 +1,21 @@
 # TanksWiki
 
-TanksWiki is web application built for managing data on military tanks and their associated modules. The application allows users to securely log in and perform CRUD (Create, Read, Update, Delete) operations on tanks and modules, with real-time updates powered by WebSockets. The frontend is built using **React**, while the backend is developed with **Spring Boot**. **Spring Security** and **JWT** (JSON Web Token) are used for secure authentication and authorization.
+TanksWiki is web application built for managing data on military tanks and their associated modules. The application allows users to securely log in and perform CRUD (Create, Read, Update, Delete) operations on tanks and modules, with real-time updates using WebSockets. The frontend is built using **React**, while the backend is developed with **Spring Boot**. **Spring Security** and **JWT** (JSON Web Token) are used for secure authentication and authorization.
 <br><br>**Link to TanksWiki-frontend:** https://github.com/912-Contiu-Mario/TanksWiki-Frontend
 ---
+
+**Login page**
+![image](https://github.com/user-attachments/assets/fa0c0d5d-16dd-43fc-9fef-610990567d84)
+
+**Main page**
+![image](https://github.com/user-attachments/assets/70664d09-873f-495d-a2c5-92a62ee529a1)
+
+**Tank description page**
+![image](https://github.com/user-attachments/assets/889c7c42-747c-4cc8-aa81-b4942f22bd67)
+
+**Modules page**
+![image](https://github.com/user-attachments/assets/f2d4a295-c0d6-4592-9e67-3fd5484b9548)
+
 
 ## Project Overview
 
